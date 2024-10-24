@@ -9,3 +9,5 @@ the definitive wakeup cli
   - Packages: web3, documentation, api, ui, ??
 
 > npx wake3 add web3/documentation/api/ui
+
+> npx wake3 export-docs --pdf
