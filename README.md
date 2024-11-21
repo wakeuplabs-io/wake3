@@ -1,13 +1,14 @@
 # wake3
-the definitive wakeup cli
+The definitive wakeup cli
 
+## development
 
-## Commands
+```bash
+npm install
+npm run start 'some command'
+```
+## Installation
 
-> npx wake3 init
-  - Project name:
-  - Packages: web3, documentation, api, ui, ??
-
-> npx wake3 add web3/documentation/api/ui
-
-> npx wake3 export-docs --pdf
+```bash
+npm install -g wake3-cli
+```
