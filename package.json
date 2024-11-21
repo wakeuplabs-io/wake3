@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "npx ts-node src/cli.ts"
+    "start": "npx ts-node src/index.ts"
   },
   "author": "",
   "license": "ISC",
