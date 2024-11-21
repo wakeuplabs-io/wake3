@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "the definitive wakeup cli",
   "bin": {
-    "wake3-cli": "./dist/cli.js"
+    "wake3-cli": "./dist/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
