@@ -7,33 +7,31 @@ const program = new Command();
 
 program
     .name("monorepo-cli")
-    .description(
-        "CLI para generar y gestionar un monorepo con múltiples paquetes"
-    )
+    .description("CLI to create and manage a monorepo with multiple packages")
     .version("1.0.0");
 
-// Comando: create
+// Command: create
 program
     .command("create")
-    .description("Crea un nuevo monorepo")
-    .option("-n, --name <name>", "Nombre del monorepo", "my-monorepo")
+    .description("Creates a new monorepo")
+    .option("-n, --name <name>", "Name of the monorepo", "my-monorepo")
     .action(async (options) => {
         const monorepoName = options.name;
 
-        console.log(`🚀 Creando el monorepo: ${monorepoName}`);
+        console.log(`🚀 Creating the monorepo: ${monorepoName}`);
         const monorepoGenerator = new MonorepoGenerator(monorepoName);
         await monorepoGenerator.create();
 
-        console.log("✅ ¡Monorepo creado con éxito!");
+        console.log("✅ Monorepo successfully created!");
     });
 
-// Comando: add-package
+// Command: add-package
 program
     .command("add-package <monorepo>")
-    .description("Agrega un paquete a un monorepo existente")
+    .description("Adds a package to an existing monorepo")
     .action(async (monorepo) => {
-        console.log(`📦 Agregando el paquete al monorepo ${monorepo}`);
+        console.log(`📦 Adding a package to the monorepo ${monorepo}`);
     });
 
-// Procesar comandos
+// Process commands
 program.parse();
