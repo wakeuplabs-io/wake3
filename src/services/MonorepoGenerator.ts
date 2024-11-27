@@ -11,7 +11,7 @@ export class MonorepoGenerator {
         this.monorepoPath = monorepoPath;
     }
 
-    async create(): Promise<void> {
+    async create(): Promise<string> {
         const answer = await checkbox({
             message: "Select packages",
             choices: [
@@ -40,5 +40,6 @@ export class MonorepoGenerator {
                     break;
             }
         }
+        return this.monorepoPath;
     }
 }
