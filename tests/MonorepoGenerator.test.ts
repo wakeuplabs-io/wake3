@@ -1,4 +1,4 @@
-import { checkbox } from "@inquirer/prompts";
+import { checkbox, confirm } from "@inquirer/prompts";
 import fs from "fs";
 import tmp from "tmp";
 import { MonorepoGenerator } from "../src/services/MonorepoGenerator";
@@ -22,6 +22,8 @@ describe("MonorepoGenerator", () => {
     // Mock the package selection prompt to simulate no packages being selected.
     const noPackageSelection: string[] = [];
     (checkbox as unknown as jest.Mock<Promise<string[]>>).mockResolvedValue(noPackageSelection);
+    // Confirm the monorepo creation
+    (confirm as unknown as jest.Mock<Promise<boolean>>).mockResolvedValue(true);
 
     const repoRootPath = `${tempDir.name}/${REPO_NAME}`
     const monorepoGenerator = new MonorepoGenerator(repoRootPath);

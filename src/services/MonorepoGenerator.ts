@@ -1,8 +1,5 @@
-import { checkbox } from "@inquirer/prompts";
 import { existsSync, mkdirSync } from "fs";
-import path from "path";
-import { PACKAGES } from "../shared/constants";
-import { Web3Generator } from "./Web3Generator";
+import { MonorepoSpecGenerator, ProjectSpec } from "./spec/MonorepoSpecGenerator";
 
 export class MonorepoGenerator {
     private monorepoPath: string;
@@ -12,39 +9,15 @@ export class MonorepoGenerator {
     }
 
     async create(): Promise<string> {
-        const answer = await checkbox({
-            message: "Select packages",
-            choices: [
-                { name: "web3", value: PACKAGES.WEB3 },
-                { name: "api", value: PACKAGES.API },
-                { name: "ui", value: PACKAGES.UI },
-            ],
-        });
-        console.log(answer);
-        for (const packageType of answer) {
-            const pkgPath = path.join(
-                this.monorepoPath,
-                "packages",
-                packageType
-            );
-            switch (packageType) {
-                case PACKAGES.WEB3:
-                    const Web3Service = new Web3Generator(pkgPath);
-                    await Web3Service.create();
-                    break;
-                case PACKAGES.API:
-                    break;
-                case PACKAGES.UI:
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        //create monorepo path
-        if (!existsSync(this.monorepoPath)) {
-            mkdirSync(this.monorepoPath, { recursive: true });
-        }        
-        return this.monorepoPath;
+        const specGenerator = new MonorepoSpecGenerator(this.monorepoPath);
+        const spec = await specGenerator.generate();
+        return this.createFromSpec(spec);
     }
-}
+
+    async createFromSpec(spec: ProjectSpec): Promise<string> {
+        if (!existsSync(spec.monorepoPath)) {
+            mkdirSync(spec.monorepoPath, { recursive: true });
+        }
+        return spec.monorepoPath;
+    };
+};
