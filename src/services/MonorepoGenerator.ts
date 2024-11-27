@@ -1,6 +1,6 @@
-import { mkdirSync, writeFileSync } from "fs";
+import { checkbox } from "@inquirer/prompts";
+import { existsSync, mkdirSync } from "fs";
 import path from "path";
-import { checkbox, Separator } from "@inquirer/prompts";
 import { PACKAGES } from "../shared/constants";
 import { Web3Generator } from "./Web3Generator";
 
@@ -40,6 +40,11 @@ export class MonorepoGenerator {
                     break;
             }
         }
+
+        //create monorepo path
+        if (!existsSync(this.monorepoPath)) {
+            mkdirSync(this.monorepoPath, { recursive: true });
+        }        
         return this.monorepoPath;
     }
 }
