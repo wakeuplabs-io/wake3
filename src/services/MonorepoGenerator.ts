@@ -1,5 +1,7 @@
 import { existsSync, mkdirSync } from "fs";
 import { MonorepoSpecGenerator, ProjectSpec } from "./spec/MonorepoSpecGenerator";
+import path from "path";
+
 
 export class MonorepoGenerator {
     private monorepoPath: string;
@@ -16,7 +18,8 @@ export class MonorepoGenerator {
 
     async createFromSpec(spec: ProjectSpec): Promise<string> {
         if (!existsSync(spec.monorepoPath)) {
-            mkdirSync(spec.monorepoPath, { recursive: true });
+            //packages directory
+            mkdirSync(path.join(spec.monorepoPath,"packages"), { recursive: true });
         }
         return spec.monorepoPath;
     };
