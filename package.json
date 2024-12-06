@@ -8,6 +8,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
+    "postbuild": "cp -r ./templates ./dist",
     "start": "npx ts-node src/index.ts"
   },
   "author": "",

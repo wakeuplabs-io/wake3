@@ -1,4 +1,5 @@
 import { cpSync, existsSync, mkdirSync } from "fs";
+import path from "path";
 import { MonorepoSpecGenerator, ProjectSpec } from "./spec/MonorepoSpecGenerator";
 
 
@@ -20,7 +21,7 @@ export class MonorepoGenerator {
             mkdirSync(spec.monorepoPath, { recursive: true });
         }
 
-        const emptyMonorepoPath="./templates/empty-monorepo"
+        const emptyMonorepoPath = path.join(__dirname, '../../templates', 'empty-monorepo')
         cpSync(emptyMonorepoPath, spec.monorepoPath, { recursive: true });
 
         return spec.monorepoPath;
