@@ -1,9 +1,7 @@
 import { checkbox, confirm } from "@inquirer/prompts";
-import fs from "fs";
+import { compareSync } from "dir-compare";
 import tmp from "tmp";
 import { MonorepoGenerator } from "../src/services/MonorepoGenerator";
-import path from "path";
-import { PACKAGES } from "../src/shared/constants";
 
 jest.mock("@inquirer/prompts");
 
@@ -32,7 +30,13 @@ describe("MonorepoGenerator", () => {
     const generatedPath = await monorepoGenerator.create();
 
     expect(generatedPath).toEqual(repoRootPath);
-    const directoryExists = fs.existsSync(`${repoRootPath}/packages`);
-    expect(directoryExists).toBe(true);
+
+    const emptyMonorepoPath = "./templates/empty-monorepo"
+    const comparisonResult = compareSync(emptyMonorepoPath, repoRootPath, {
+      compareContent: true,
+    });
+
+    expect(comparisonResult.same).toBe(true);
+
   });
 });

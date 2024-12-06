@@ -15,6 +15,7 @@
   "dependencies": {
     "@inquirer/prompts": "^7.1.0",
     "commander": "^12.1.0",
+    "dir-compare": "^5.0.0",
     "fs-extra": "^11.2.0",
     "tmp": "^0.2.3"
   },
