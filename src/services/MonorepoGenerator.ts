@@ -1,29 +1,28 @@
 import { cpSync, existsSync, mkdirSync } from "fs";
 import path from "path";
-import { MonorepoSpecGenerator, ProjectSpec } from "./spec/MonorepoSpecGenerator";
+import { MonorepoSpec, ProjectSpec } from "./MonorepoSpec";
 
 
 export class MonorepoGenerator {
-    private monorepoPath: string;
 
-    constructor(monorepoPath: string) {
-        this.monorepoPath = monorepoPath;
-    }
+    static readonly EMPTY_MONOREPO_TEMPLATE_PATH = path.join(__dirname, '../../templates', 'empty-monorepo');
 
-    async create(): Promise<string> {
-        const specGenerator = new MonorepoSpecGenerator(this.monorepoPath);
-        const spec = await specGenerator.generate();
-        return this.createFromSpec(spec);
-    }
+    private constructor() { }
 
     async createFromSpec(spec: ProjectSpec): Promise<string> {
         if (!existsSync(spec.monorepoPath)) {
             mkdirSync(spec.monorepoPath, { recursive: true });
         }
 
-        const emptyMonorepoPath = path.join(__dirname, '../../templates', 'empty-monorepo')
-        cpSync(emptyMonorepoPath, spec.monorepoPath, { recursive: true });
-
+        cpSync(MonorepoGenerator.EMPTY_MONOREPO_TEMPLATE_PATH, spec.monorepoPath, { recursive: true });
         return spec.monorepoPath;
     };
+
+    static async create(monorepoPath: string): Promise<string> {
+        const specGenerator = new MonorepoSpec(monorepoPath);
+        const spec = await specGenerator.generate();
+
+        const monorepoGenerator = new MonorepoGenerator();
+        return monorepoGenerator.createFromSpec(spec);
+    }
 };

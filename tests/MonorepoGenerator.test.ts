@@ -19,15 +19,11 @@ describe("MonorepoGenerator", () => {
   });
 
   it("creates an empty project when no packages are selected", async () => {
-    // Mock the package selection prompt to simulate no packages being selected.
-    const noPackageSelection: string[] = [];
-    (checkbox as unknown as jest.Mock<Promise<string[]>>).mockResolvedValue(noPackageSelection);
     // Confirm the monorepo creation
     (confirm as unknown as jest.Mock<Promise<boolean>>).mockResolvedValue(true);
 
     const repoRootPath = `${tempDir.name}/${REPO_NAME}`
-    const monorepoGenerator = new MonorepoGenerator(repoRootPath);
-    const generatedPath = await monorepoGenerator.create();
+    const generatedPath = await MonorepoGenerator.create(repoRootPath);
 
     expect(generatedPath).toEqual(repoRootPath);
 
