@@ -20,8 +20,9 @@ describe("MonorepoGenerator", () => {
   });
 
   it("generates an empty monorepo when react monorepo is not selected", async () => {
-    // Confirm the monorepo creation
-    (confirm as unknown as jest.Mock<Promise<boolean>>).mockResolvedValue(true);
+    (confirm as unknown as jest.Mock<Promise<boolean>>)
+      .mockResolvedValueOnce(false) // User skips React monorepo
+      .mockResolvedValueOnce(true); // User confirms monorepo creation
 
     const repoRootPath = `${tempDir.name}/${REPO_NAME}`
     const generatedPath = await MonorepoGenerator.create(repoRootPath);

@@ -25,6 +25,11 @@ export class MonorepoSpec {
             }
         }
 
+        const isReactMonorepo = await confirm({
+            message: "Would you like to create a React monorepo?",
+            default: false,
+        });
+
         // Confirmation to proceed with the provided path
         const confirmPath = await confirm({
             message: `The monorepo will be created at the path "${this.monorepoPath}". Do you want to proceed?`,
@@ -38,6 +43,7 @@ export class MonorepoSpec {
 
         return {
             monorepoPath: this.monorepoPath,
+            isReactMonorepo: isReactMonorepo
         };
     }
 }
