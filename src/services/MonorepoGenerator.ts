@@ -1,44 +1,28 @@
-import { mkdirSync, writeFileSync } from "fs";
+import { cpSync, existsSync, mkdirSync } from "fs";
 import path from "path";
-import { checkbox, Separator } from "@inquirer/prompts";
-import { PACKAGES } from "../shared/constants";
-import { Web3Generator } from "./Web3Generator";
+import { MonorepoSpec, ProjectSpec } from "./MonorepoSpec";
+
 
 export class MonorepoGenerator {
-    private monorepoPath: string;
 
-    constructor(monorepoPath: string) {
-        this.monorepoPath = monorepoPath;
-    }
+    static readonly EMPTY_MONOREPO_TEMPLATE_PATH = path.join(__dirname, '../../templates', 'empty-monorepo');
 
-    async create(): Promise<void> {
-        const answer = await checkbox({
-            message: "Select packages",
-            choices: [
-                { name: "web3", value: PACKAGES.WEB3 },
-                { name: "api", value: PACKAGES.API },
-                { name: "ui", value: PACKAGES.UI },
-            ],
-        });
-        console.log(answer);
-        for (const packageType of answer) {
-            const pkgPath = path.join(
-                this.monorepoPath,
-                "packages",
-                packageType
-            );
-            switch (packageType) {
-                case PACKAGES.WEB3:
-                    const Web3Service = new Web3Generator(pkgPath);
-                    await Web3Service.create();
-                    break;
-                case PACKAGES.API:
-                    break;
-                case PACKAGES.UI:
-                    break;
-                default:
-                    break;
-            }
+    private constructor() { }
+
+    async createFromSpec(spec: ProjectSpec): Promise<string> {
+        if (!existsSync(spec.monorepoPath)) {
+            mkdirSync(spec.monorepoPath, { recursive: true });
         }
+
+        cpSync(MonorepoGenerator.EMPTY_MONOREPO_TEMPLATE_PATH, spec.monorepoPath, { recursive: true });
+        return spec.monorepoPath;
+    };
+
+    static async create(monorepoPath: string): Promise<string> {
+        const specGenerator = new MonorepoSpec(monorepoPath);
+        const spec = await specGenerator.generate();
+
+        const monorepoGenerator = new MonorepoGenerator();
+        return monorepoGenerator.createFromSpec(spec);
     }
-}
+};

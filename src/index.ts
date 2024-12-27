@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import { MonorepoGenerator } from "./services/MonorepoGenerator";
-//import { PackageGenerator } from './services/PackageGenerator';
 
 const program = new Command();
 
@@ -19,18 +18,9 @@ program
         const monorepoName = options.name;
 
         console.log(`🚀 Creating the monorepo: ${monorepoName}`);
-        const monorepoGenerator = new MonorepoGenerator(monorepoName);
-        await monorepoGenerator.create();
+        await MonorepoGenerator.create(monorepoName);
 
         console.log("✅ Monorepo successfully created!");
-    });
-
-// Command: add-package
-program
-    .command("add-package <monorepo>")
-    .description("Adds a package to an existing monorepo")
-    .action(async (monorepo) => {
-        console.log(`📦 Adding a package to the monorepo ${monorepo}`);
     });
 
 // Process commands
