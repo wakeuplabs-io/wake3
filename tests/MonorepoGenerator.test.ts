@@ -2,6 +2,7 @@ import { checkbox, confirm } from "@inquirer/prompts";
 import { compareSync } from "dir-compare";
 import tmp from "tmp";
 import { MonorepoGenerator } from "../src/services/MonorepoGenerator";
+import { ProjectSpec } from "../src/services/MonorepoSpec";
 
 jest.mock("@inquirer/prompts");
 
@@ -18,7 +19,7 @@ describe("MonorepoGenerator", () => {
     tempDir.removeCallback();
   });
 
-  it("creates an empty project when no packages are selected", async () => {
+  it("generates an empty monorepo when react monorepo is not selected", async () => {
     // Confirm the monorepo creation
     (confirm as unknown as jest.Mock<Promise<boolean>>).mockResolvedValue(true);
 
@@ -29,6 +30,25 @@ describe("MonorepoGenerator", () => {
 
     const emptyMonorepoPath = "./templates/empty-monorepo"
     const comparisonResult = compareSync(emptyMonorepoPath, repoRootPath, {
+      compareContent: true,
+    });
+
+    expect(comparisonResult.same).toBe(true);
+
+  });
+
+  it("generates a react monorepo when specified in the project spec", async () => {
+    const repoRootPath = `${tempDir.name}/${REPO_NAME}`
+    const spec: ProjectSpec = {
+      monorepoPath: repoRootPath,
+      isReactMonorepo: true
+    }
+    const generatedPath = await MonorepoGenerator.createFromSpec(spec);
+
+    expect(generatedPath).toEqual(repoRootPath);
+
+    const reactMonorepoPath = "./templates/react-monorepo"
+    const comparisonResult = compareSync(reactMonorepoPath, repoRootPath, {
       compareContent: true,
     });
 

@@ -3,6 +3,7 @@ import { confirm, input } from "@inquirer/prompts";
 
 export interface ProjectSpec {
     monorepoPath: string;
+    isReactMonorepo?: boolean
 }
 
 export class MonorepoSpec {
